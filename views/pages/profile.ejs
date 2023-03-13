@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include("../partials/meta") %>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-3 col-sm-3 col-md-2 col-lg-2"><%- include("../partials/sidebar") %></div>
+        <div class="min-vh-100 col-sm-9 col-9 col-md-10 col-lg-6">
+          <div class="content-container h-50 p-0">
+            <div class="h-25 bgTweeter position-relative">
+              <img src="<%= profileUser.avatar.includes("http")? profileUser.avatar:
+              `/img/${profileUser.avatar}` %>" class="profileImageHero "/>
+            </div>
+
+            <!-- Primer if muestra el boton follow/unfollow y el else no muestra si el perfil es del usuario logeado -->
+            <% if (profileUser.username !== myUser.username) {%>
+            <form class="d-flex" action="/usuarios/<%= profileUser.id %>/follow" method="post">
+              <% if(user.following.includes(profileUser.id)){ %>
+              <button class="btn btn-outline-dark rounded-pill ms-auto mt-3 mb-3" type="submit">
+                Unfollow
+              </button>
+              <% }else{ %>
+              <button type="submit" class="btn bgTweeter rounded-pill ms-auto mt-3 mb-3">
+                Follow
+              </button>
+              <% } %>
+            </form>
+            <% } else { %>
+            <form class="d-flex" action="/usuarios/<%= profileUser.id %>/follow" method="post">
+              <% if(user.following.includes(profileUser.id)){ %>
+              <button
+                class="btn text-white rounded-pill ms-auto mt-3 mb-3 text-transparent"
+                type="submit"
+              >
+                Unfollow
+              </button>
+              <% }else{ %>
+              <button type="submit" class="btn text-white rounded-pill ms-auto mt-3 mb-3">
+                Follow
+              </button>
+              <% } %>
+            </form>
+            <% }%>
+            <h5 class="fs-4 ms-4"><%= profileUser.firstname %> <%= profileUser.lastname %></h5>
+            <div class="d-flex flex-column">
+              <p class="ms-4">@<%= profileUser.username %></p>
+              <p class="ms-4"><%= profileUser.description %></p>
+            </div>
+            <div class="d-flex justify-content-end">
+              <a
+                href="/usuarios/following/<%= profileUser.username %>"
+                class="ms-auto text-decoration-none text-muted"
+                ><%= profileUser.following.length %> Following</a
+              >
+              <a
+                href="/usuarios/followers/<%= profileUser.username %>"
+                class="ms-3 text-decoration-none text-muted"
+                ><%= profileUser.followers.length %> Followers</a
+              >
+            </div>
+            <div>
+              <p class="ms-4 fw-bold border-bottom">Tweets <%= profileUser.tweets.length %></p>
+              <% for (const tweet of profileUser.tweets.reverse()) { %>
+
+              <div class="d-flex p-2 w-100">
+                <img src="<%= profileUser.avatar.includes("http")? profileUser.avatar:
+                `/img/${profileUser.avatar}` %>" class="profileImage"/>
+                <div class="w-75">
+                  <div class="d-flex align-items-baseline w-100">
+                    <a
+                      class="text-decoration-none text-reset"
+                      href="/usuarios/<%= tweet.userId.username %>"
+                      ><h6 class="mb-0 mr-2">
+                        <strong> <%= profileUser.firstname %> <%= profileUser.lastname %> </strong>
+                      </h6></a
+                    >
+                    <p class="text-muted m-0 fs-6">@<%= profileUser.username %></p>
+                  </div>
+                  <p class="m-0" id="tweet-content"><%= tweet.body %></p>
+                  <div class="d-flex p-2 justify-content-between">
+                    <form method="post" action="/tweets/<%= tweet.id  %>/like">
+                      <button
+                        id="cora_<% tweet.id %>"
+                        type="submit"
+                        class="border-0 bg-transparent"
+                      >
+                        <i
+                          class="<% if(tweet.likes.includes(locals.user.id)){%> fa-solid <%} else {%> fa-regular <%}%> text-danger fa-heart"
+                        >
+                        </i>
+                      </button>
+                      <span> <%= tweet.likes.length %> </span>
+                    </form>
+
+                    <!-- <p><--%=locals.user.id == tweet.userId._id%></p> -->
+                    <!-- <--% if(localUser == tweet.userId._id){%> -->
+                    <% if(user.id === profileUser.id){ %>
+                    <form method="POST" action="/tweets/<%= tweet._id %>?_method=DELETE">
+                      <button type="submit" class="border-0 bg-transparent">
+                        <i class="fa-solid fa-trash ms-auto"></i>
+                      </button>
+                    </form>
+                    <%}%>
+                  </div>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 hidden-sm"><%- include("../partials/rightSidebar") %></div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://kit.fontawesome.com/9f0d5f7751.js" crossorigin="anonymous"></script>
+  </body>
+</html>
