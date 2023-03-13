@@ -1,7 +1,9 @@
 const User = require("../models/User");
 
 // Display a listing of the resource.
-async function index(req, res) {}
+async function index(req, res) {
+  res.json("Hello word!");
+}
 
 async function userFollowing(req, res) {
   const profileUser = await User.findOne({ username: req.params.username });
@@ -12,7 +14,7 @@ async function userFollowing(req, res) {
   // https://mongoosejs.com/docs/populate.html#query-conditions
 
   const following = user.following;
-  return res.render("pages/following", { following, profileUser });
+  return res.json("pages/following", { following, profileUser });
 }
 
 async function userFollowers(req, res) {
@@ -24,25 +26,12 @@ async function userFollowers(req, res) {
   // https://mongoosejs.com/docs/populate.html#query-conditions
 
   const followers = user.followers;
-  return res.render("pages/followers", { followers, profileUser });
+  return res.json("pages/followers", { followers, profileUser });
 }
-
-// Display the specified resource.
-async function show(req, res) {
-  const profileUser = await User.findOne({ username: req.params.username }).populate("tweets");
-  const myUser = await User.findById(req.session.passport.user);
-  return res.render("pages/profile", {
-    profileUser,
-    myUser,
-  });
-}
-
-// Show the form for creating a new resource
-async function create(req, res) {}
 
 // Store a newly created resource in storage.
 async function store(req, res) {
-  return res.redirect("/login");
+  return res.json("/login");
 }
 
 async function follow(req, res) {
@@ -57,30 +46,14 @@ async function follow(req, res) {
 
   await loggedUser.save();
 
-  res.redirect("back");
+  res.json("back");
 }
-
-// Show the form for editing the specified resource.
-async function edit(req, res) {}
-
-// Update the specified resource in storage.
-async function update(req, res) {}
-
-// Remove the specified resource from storage.
-async function destroy(req, res) {}
-
-// Otros handlers...
-
-// ...
 
 module.exports = {
   index,
-  show,
-  create,
+
   store,
-  edit,
-  update,
-  destroy,
+
   userFollowing,
   userFollowers,
   follow,

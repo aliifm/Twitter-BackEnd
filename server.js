@@ -1,25 +1,14 @@
 require("dotenv").config();
-const path = require("path");
-const methodOverride = require("method-override");
 const express = require("express");
-const formidable = require("formidable");
 
-const sessions = require("./sessions");
 const routes = require("./routes");
-const passport = require("./passport");
-const makeUserAvailableInViews = require("./middlewares/makeUserAvailableInViews");
 
 const APP_PORT = process.env.APP_PORT || 3000;
 const app = express();
 
-app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.set("view engine", "ejs");
+app.use(express.json());
 
-sessions(app);
-passport(app);
-app.use(makeUserAvailableInViews);
 routes(app);
 
 app.listen(APP_PORT, () => {

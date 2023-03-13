@@ -1,4 +1,3 @@
-const passport = require("passport");
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 
@@ -9,7 +8,7 @@ async function tweet(req, res) {
   await user.save();
   await newTweet.save();
 
-  return res.redirect("/");
+  return res.json("/");
 }
 
 async function like(req, res) {
@@ -23,29 +22,13 @@ async function like(req, res) {
 
   await tweet.save();
 
-  return res.redirect("back");
+  return res.json("back");
 }
-
-// async function follow(req, res) {
-//   console.log("hola");
-//   const profileUser = await User.findById(req.params.id);
-//   const user = await User.findById(user.following.id);
-
-//   if (!profileUser.following.includes(req.user.id)) {
-//     profileUser.following.push(req.user.id);
-//   } else {
-//     profileUser.following.pull(req.user.id);
-//   }
-
-//   await profileUser.save();
-
-//   return res.redirect("/", { profileUser });
-// }
 
 async function destroy(req, res) {
   await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
 
-  return res.redirect("back");
+  return res.json("back");
 }
 
 module.exports = {
