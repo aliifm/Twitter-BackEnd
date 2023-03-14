@@ -4,10 +4,12 @@ const userController = require("../controllers/userController");
 
 router.get("/", userController.index);
 router.get("/:id", userController.show); // informacion de usuario por id - tweets/tweet/seguidos/seguidores
-router.get("/followers/:username", userController.userFollowers);
-router.get("/following/:username", userController.userFollowing);
-router.post("/", userController.store);
+router.post("/", userController.store); //
 router.post("/:id/follow", userController.follow);
+
+//rutas nuestras proyecto anterior
+router.get("/followers/:username", userController.userFollowers); //
+router.get("/following/:username", userController.userFollowing);
 
 module.exports = router;
 
