@@ -6,6 +6,6 @@ const authController = require("../controllers/authController");
  * Se sugiere usar este archivo para crear rutas relativas al proceso de
  * autenticación. Ejemplos: "/login" y "/logout".
  */
-router.post("/token", authController.token);
+router.post("/", authController.token);
 
 module.exports = router;

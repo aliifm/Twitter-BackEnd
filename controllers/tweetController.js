@@ -1,12 +1,24 @@
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 
+// const token = require("./authController");
+
+async function show(req, res) {
+  console.log(req.auth.id);
+  const tweets = await Tweet.find({ userId: req.auth.id });
+  return res.json(tweets);
+}
+
 async function tweet(req, res) {
-  const newTweet = await Tweet.create({ body: req.body.newTweet, userId: req.user._id });
-  const user = await User.findById(req.user.id);
-  user.tweets.push(newTweet);
-  await user.save();
-  await newTweet.save();
+  console.log(req.auth.id);
+  // const newTweet = await Tweet.create({
+  //   body: req.body.newTweet,
+  //   userId: /*req.auth.id ??*/ req.user._id,
+  // });
+  // const user = await User.findById(req.user.id);
+  // user.tweets.push(newTweet);
+  // await user.save();
+  // await newTweet.save();
 
   return res.json("/");
 }
@@ -32,6 +44,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  show,
   like,
   tweet,
   destroy,
