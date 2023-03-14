@@ -2,7 +2,11 @@ const User = require("../models/User");
 
 // Display a listing of the resource.
 async function index(req, res) {
-  res.json("Hello word!");
+  res.json("Hello word! -Funciona");
+}
+
+async function index(req, res) {
+  res.json("Show user - Funciona");
 }
 
 async function userFollowing(req, res) {

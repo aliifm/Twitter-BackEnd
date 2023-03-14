@@ -1,3 +1,5 @@
+const { expressjwt: checkJwt } = require("express-jwt");
+
 /**
  * No hay una única forma de organizar las rutas de un sitio web.
  * Una alternativa podría ser organizar las rutas por entidad:
@@ -19,6 +21,7 @@ const tokenRoutes = require("./tokenRoutes");
  */
 
 // const privateRoutes = require("./privateRoutes");
+
 const tweetRoutes = require("./tweetRoutes");
 
 module.exports = (app) => {

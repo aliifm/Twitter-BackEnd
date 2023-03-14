@@ -1,20 +1,24 @@
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const { expressjwt: checkJwt } = require("express-jwt");
 
-async function index(req, res) {
-  const user = await User.findOne({ email: req.body.email });
-  const checkHash = await user.passwordCheck(req.body.password);
-  if (user && checkHash) {
-    return res.json(user);
-  } else {
-    return res.json("No existe este usuario");
-  }
+async function token(req, res) {
+  const token = jwt.sign({ info: "Data" }, "Secreto");
+  return res.json({ token });
 }
 
+// const user = await User.findOne({ email: req.body.email });
+// const checkHash = await user.passwordCheck(req.body.password);
+// if (user && checkHash) {
+
+//   // aca va jwt.sing
+//   return res.json(user); //OJO -modo prueba- aca estamos enviando pw al front -
+
+// } else {
+//   return res.json("No existe este usuario");
+// }
 module.exports = {
-  index,
+  token,
 };
 
 //Ejemplo Rutas de marcus
@@ -36,3 +40,9 @@ module.exports = {
 //   update,
 //   destroy,
 // };
+
+// router.get("/", controller.index);
+// router.get("/:id", controller.show);
+// router.post("/", controller.store);
+// router.patch("/:id", controller.update);
+// router.delete("/:id", controller.destroy);
