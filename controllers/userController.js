@@ -8,16 +8,39 @@ async function index(req, res) {
     "CONSULTAR si muestra informacion random de tweet e invita a loguearse o registrarse a la pagina",
   );
 }
-
+// RUTA ACTUALIZADA
 async function show(req, res) {
-  // buscas al usuario en la base de datos y se muestran la info de los tweets(.map) de seguidos y seguidores
-  // const user = await User.findOne({ id: req.params.id }).populate("following");
-  // const tweet = await User.findOne({ id: req.params.id }).populate("tweets");
-  // return res.json(user.following[2].tweets[1]);
-
-  const users = await User.findOne({ id: req.params.id });
+  const user = await User.findOne({ id: req.params.id });
   const tweets = await Tweet.find().populate("userId").sort({ createdAt: -1 }).limit(20);
-  return res.json({ users, tweets });
+
+  return res.json({ user, tweets });
+}
+
+// RUTA ACTUALIZADA
+// Store a newly created resource in storage.
+async function store(req, res) {
+  const { firstname, lastname, username, email, password, avatar } = req.body;
+  const user = new User({ firstname, lastname, username, email, password, avatar });
+  await user.save();
+
+  return res.json(user);
+}
+
+// ----------------------------------------VER------------------------------
+// VER SI LAS UTILIZARIAMOS
+async function follow(req, res) {
+  const profileUser = await User.findById(req.params.id);
+  const loggedUser = await User.findById(req.user.id);
+
+  if (!loggedUser.following.includes(profileUser.id)) {
+    loggedUser.following.push(profileUser.id);
+  } else {
+    loggedUser.following.pull(profileUser.id);
+  }
+
+  await loggedUser.save();
+
+  res.json("back");
 }
 
 async function userFollowing(req, res) {
@@ -45,31 +68,10 @@ async function userFollowers(req, res) {
   return res.json("pages/followers", { followers, profileUser });
 }
 
-// Store a newly created resource in storage.
-async function store(req, res) {
-  return res.json("/login");
-}
-
-async function follow(req, res) {
-  const profileUser = await User.findById(req.params.id);
-  const loggedUser = await User.findById(req.user.id);
-
-  if (!loggedUser.following.includes(profileUser.id)) {
-    loggedUser.following.push(profileUser.id);
-  } else {
-    loggedUser.following.pull(profileUser.id);
-  }
-
-  await loggedUser.save();
-
-  res.json("back");
-}
-
 module.exports = {
   index,
   show,
   store,
-
   userFollowing,
   userFollowers,
   follow,
