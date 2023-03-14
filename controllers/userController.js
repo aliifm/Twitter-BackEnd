@@ -1,15 +1,27 @@
 const User = require("../models/User");
+const Tweet = require("../models/Tweet");
 
 // Display a listing of the resource.
 async function index(req, res) {
-  res.json("Hello word! -Funciona");
+  // muestra informacion random de tweet e invita a loguearse o registrarse a la pagina
+  return res.json(
+    "CONSULTAR si muestra informacion random de tweet e invita a loguearse o registrarse a la pagina",
+  );
 }
 
-async function index(req, res) {
-  res.json("Show user - Funciona");
+async function show(req, res) {
+  // buscas al usuario en la base de datos y se muestran la info de los tweets(.map) de seguidos y seguidores
+  // const user = await User.findOne({ id: req.params.id }).populate("following");
+  // const tweet = await User.findOne({ id: req.params.id }).populate("tweets");
+  // return res.json(user.following[2].tweets[1]);
+
+  const users = await User.findOne({ id: req.params.id });
+  const tweets = await Tweet.find().populate("userId").sort({ createdAt: -1 }).limit(20);
+  return res.json({ users, tweets });
 }
 
 async function userFollowing(req, res) {
+  //
   const profileUser = await User.findOne({ username: req.params.username });
   const user = await User.findOne({ id: req.params.id }).populate({
     path: "following",
@@ -55,7 +67,7 @@ async function follow(req, res) {
 
 module.exports = {
   index,
-
+  show,
   store,
 
   userFollowing,
