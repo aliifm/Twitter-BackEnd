@@ -2,12 +2,12 @@ const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 
 // const token = require("./authController");
-
+// aqui quiero traerme los tweets de los seguidores de
 async function show(req, res) {
   console.log(req.auth.id);
   const tweets = await Tweet.find({ userId: req.auth.id });
   return res.json(tweets);
-}
+} // Esta funcio deberia ser el index de tweets y mostrar los tweets de los seguidores de la persona logueada y limitarlos a 20 tweets - investigar $in  podria ser necesario
 
 async function tweet(req, res) {
   console.log(req.auth.id);

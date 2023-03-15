@@ -10,10 +10,12 @@ async function index(req, res) {
 }
 // RUTA ACTUALIZADA
 async function show(req, res) {
-  const user = await User.findOne({ id: req.params.id });
-  const tweets = await Tweet.find().populate("userId").sort({ createdAt: -1 }).limit(20);
+  const user = await User.findOne({ id: req.params.id })
+    .populate("tweets")
+    .sort({ createdAt: -1 })
+    .limit(20);
 
-  return res.json({ user, tweets });
+  return res.json({ user });
 }
 
 // RUTA ACTUALIZADA
