@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 
-router.get("/", userController.index);
 router.get("/:id", userController.show); // informacion de usuario por id - tweets/tweet/seguidos/seguidores
 router.post("/", userController.store); //
 router.post("/:id/follow", userController.follow);

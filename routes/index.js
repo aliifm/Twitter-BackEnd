@@ -1,5 +1,3 @@
-const { expressjwt: checkJwt } = require("express-jwt");
-
 /**
  * No hay una única forma de organizar las rutas de un sitio web.
  * Una alternativa podría ser organizar las rutas por entidad:
