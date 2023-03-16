@@ -7,12 +7,10 @@ const { expressjwt: checkJwt } = require("express-jwt");
  * Se sugiere usar este archivo para crear rutas relativas al proceso de
  * autenticación. Ejemplos: "/login" y "/logout".
  */
+
+router.use(checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] }));
 router.get("/", tweetController.index);
-router.get(
-  "/show",
-  checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] }),
-  tweetController.show,
-);
+router.get("/show", tweetController.show);
 router.post("/store", tweetController.tweet);
 router.delete("/:id", tweetController.destroy);
 router.post("/:id/like", tweetController.like);

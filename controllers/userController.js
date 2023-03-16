@@ -3,7 +3,8 @@ const Tweet = require("../models/Tweet");
 
 // RUTA ACTUALIZADA
 async function show(req, res) {
-  const user = await User.findOne({ id: req.params.id })
+  const user = await User.findById(req.params.id)
+
     .populate("tweets")
     .sort({ createdAt: -1 })
     .limit(20);

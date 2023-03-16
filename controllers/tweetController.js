@@ -10,6 +10,7 @@ async function index(req, res) {
 
   // Obtener los tweets de los usuarios que sigue el usuario logueado y ordenarlos por fecha de creación descendente
   const tweets = await Tweet.find({ userId: { $in: followingUsers } })
+    .populate("userId")
     .sort({ createdAt: -1 })
     .limit(20);
 
