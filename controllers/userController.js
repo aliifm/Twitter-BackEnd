@@ -53,15 +53,27 @@ async function userFollowing(req, res) {
 }
 
 async function userFollowers(req, res) {
-  const profileUser = await User.findOne({ username: req.params.username });
-  const user = await User.findOne({ id: req.params.id }).populate({
-    path: "followers",
-    select: "-password -following -followers",
-  });
+  const profileUser = await User.findOne({ username: req.params.username })
+    .populate("followers")
+    .populate("following");
+  const user = await User.findOne({ id: req.auth.id }).populate("followers").populate("following");
   // https://mongoosejs.com/docs/populate.html#query-conditions
 
-  const followers = user.followers;
-  return res.json({ followers, profileUser });
+  const userFollowers = user.followers;
+  const userFollowing = user.following;
+  const profileFollowers = profileUser.followers;
+  const profileFollowing = profileUser.following;
+
+  console.log("Followers:------------------------**************************************");
+  console.log(profileFollowers);
+
+  return res.json({
+    userFollowers,
+    userFollowing,
+    profileFollowers,
+    profileFollowing,
+    profileUser,
+  });
 }
 
 module.exports = {

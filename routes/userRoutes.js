@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+const { expressjwt: checkJwt } = require("express-jwt");
 
+router.use(checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] }));
 router.get("/:id", userController.show); // informacion de usuario por id - tweets/tweet/seguidos/seguidores
 router.post("/", userController.store); //
 router.post("/:id/follow", userController.follow);
