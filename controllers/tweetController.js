@@ -37,7 +37,7 @@ async function tweet(req, res) {
 
 async function like(req, res) {
   const tweet = await Tweet.findById(req.params.id);
-
+  console.log(tweet);
   if (!tweet.likes.includes(req.auth.id)) {
     tweet.likes.push(req.auth.id);
   } else {
