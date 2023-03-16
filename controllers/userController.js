@@ -65,7 +65,6 @@ async function userFollowers(req, res) {
   const profileFollowing = profileUser.following;
 
   return res.json({
-    user,
     userFollowers,
     userFollowing,
     profileFollowers,
