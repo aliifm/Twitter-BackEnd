@@ -23,11 +23,12 @@ async function show(req, res) {
   return res.json(tweets);
 }
 async function tweet(req, res) {
+  console.log("Se ha creado un Tweet");
   const newTweet = await Tweet.create({
     body: req.body.newTweet,
     userId: req.auth.id,
   });
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.auth.id);
   user.tweets.push(newTweet);
   await user.save();
   await newTweet.save();
