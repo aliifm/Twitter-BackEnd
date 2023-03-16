@@ -10,7 +10,7 @@ async function token(req, res) {
   const token = jwt.sign({ id: user.id }, process.env.SESSION_SECRET);
   console.log(checkHash);
   if (user && checkHash) {
-    return res.json({ token: token });
+    return res.json({ token: token, user: user });
   } else return res.json({ message: "El usuario no existe " });
 }
 
