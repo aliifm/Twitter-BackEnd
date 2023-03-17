@@ -43,18 +43,13 @@ async function userFollowStatus(req, res) {
   const loggedUser = await User.findById(req.auth.id).populate("followers");
   const clickedUser = await User.findById(req.params.id);
 
-  // Agregar o quitar usuarios de nuestras listas, following o followers
-
   if (!loggedUser.following.includes(clickedUser.id)) {
     loggedUser.following.push(clickedUser.id);
   } else {
     loggedUser.following.pull(clickedUser.id);
   }
   const loggedUserFollowers = loggedUser.followers;
-  console.log(
-    "userFollowStatus, loggedUserFollowing-----------------++++++++++++++++++-----------------++++++++++++++++++-----------------++++++++++++++++++",
-  );
-  console.log(loggedUserFollowers);
+
   await loggedUser.save();
 
   res.json({ loggedUser, loggedUserFollowers });
