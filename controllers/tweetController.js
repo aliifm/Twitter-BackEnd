@@ -18,13 +18,10 @@ async function index(req, res) {
 }
 
 async function show(req, res) {
-  console.log(req.auth.id);
   const tweets = await Tweet.find({ userId: req.auth.id });
   return res.json(tweets);
 }
 async function tweet(req, res) {
-  console.log("Se ha creado un Tweet");
-  console.log(req.body);
   const newTweet = await Tweet.create({
     body: req.body.body,
     userId: req.auth.id,
@@ -38,9 +35,7 @@ async function tweet(req, res) {
 }
 
 async function like(req, res) {
-  console.log(req.params);
   const tweet = await Tweet.findById(req.params.id);
-  console.log(tweet);
   if (!tweet.likes.includes(req.auth.id)) {
     tweet.likes.push(req.auth.id);
   } else {
@@ -53,11 +48,7 @@ async function like(req, res) {
 }
 
 async function destroy(req, res) {
-  console.log("entra");
-  console.log(req.params);
-  console.log(req.auth.id);
   const tweet = await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.auth.id });
-  console.log(tweet);
 
   return res.json({ delete: true });
 }

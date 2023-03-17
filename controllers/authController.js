@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MGY3YmY5YWU0NTgxMzQzMWIyMWFhYiIsImlhdCI6MTY3ODgyNjUwMn0.XxEt0wILcT81cQfZpVVV3X0n_phOQjy5ARmDlSA3k8s
 
 async function token(req, res) {
-  console.log("Llega hasta tweet?");
   // Validacion del usuario
   const user = await User.findOne({ email: req.body.email });
   if (user) {

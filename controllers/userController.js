@@ -25,6 +25,7 @@ async function store(req, res) {
 // ----------------------------------------VER------------------------------
 // VER SI LAS UTILIZARIAMOS
 async function follow(req, res) {
+  console.log("Le estamos pegando");
   const profileUser = await User.findById(req.params.id);
   const loggedUser = await User.findById(req.auth.id);
 
@@ -37,6 +38,31 @@ async function follow(req, res) {
   await loggedUser.save();
 
   res.json("Siguiendo a un usuario");
+}
+
+async function userFollowStatus(req, res) {
+  const loggedUser = await User.findById(req.auth.id);
+  const clickedUser = await User.findById(req.params.id);
+  console.log(
+    "LoggedUser ----------------------------------------------------------------------------------------------------",
+  );
+  console.log(loggedUser);
+  console.log(
+    "clickedUser----------------------------------------------------------------------------------------------------",
+  );
+  console.log(clickedUser);
+
+  // Agregar o quitar usuarios de nuestras listas, following o followers
+
+  if (!loggedUser.following.includes(clickedUser.id)) {
+    loggedUser.following.push(clickedUser.id);
+  } else {
+    loggedUser.following.pull(clickedUser.id);
+  }
+
+  await loggedUser.save();
+
+  res.json(loggedUser);
 }
 
 async function userFollowing(req, res) {
@@ -74,6 +100,7 @@ async function userFollowers(req, res) {
 }
 
 module.exports = {
+  userFollowStatus,
   show,
   store,
   userFollowing,
