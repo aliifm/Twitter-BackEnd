@@ -37,6 +37,7 @@ async function tweet(req, res) {
 }
 
 async function like(req, res) {
+  console.log(req.params);
   const tweet = await Tweet.findById(req.params.id);
   console.log(tweet);
   if (!tweet.likes.includes(req.auth.id)) {
@@ -47,13 +48,13 @@ async function like(req, res) {
 
   await tweet.save();
 
-  return res.json("Se ha actualizado likes");
+  return res.json({"like":true});
 }
 
 async function destroy(req, res) {
   await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.auth.id });
 
-  return res.json("Se ha eliminado el Tweet");
+  return res.json({"delete":true});
 }
 
 module.exports = {
