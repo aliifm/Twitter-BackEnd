@@ -4,14 +4,17 @@ const jwt = require("jsonwebtoken");
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MGY3YmY5YWU0NTgxMzQzMWIyMWFhYiIsImlhdCI6MTY3ODgyNjUwMn0.XxEt0wILcT81cQfZpVVV3X0n_phOQjy5ARmDlSA3k8s
 
 async function token(req, res) {
+  console.log("Llega hasta tweet?");
   // Validacion del usuario
   const user = await User.findOne({ email: req.body.email });
-  const checkHash = await user.passwordCheck(req.body.password);
-  const token = jwt.sign({ id: user.id }, process.env.SESSION_SECRET);
-  console.log(checkHash);
-  if (user && checkHash) {
-    return res.json({ token: token, user: user });
-  } else return res.json({ message: "El usuario no existe " });
+  if (user) {
+    const checkHash = await user.passwordCheck(req.body.password);
+    const token = jwt.sign({ id: user.id }, process.env.SESSION_SECRET);
+    console.log(checkHash);
+    if (user && checkHash) {
+      return res.json({ token: token, user: user });
+    } else return res.json({ message: "El usuario no existe " });
+  } else return res.json("No se pudo loguear");
 }
 
 // const user = await User.findOne({ email: req.body.email });

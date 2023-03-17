@@ -6,7 +6,7 @@ async function index(req, res) {
   const currentUser = await User.findById(req.auth.id);
 
   // Obtener los usuarios que sigue el usuario logueado
-  const followingUsers = currentUser.following;
+  const followingUsers = [req.auth.id, ...currentUser.following];
 
   // Obtener los tweets de los usuarios que sigue el usuario logueado y ordenarlos por fecha de creación descendente
   const tweets = await Tweet.find({ userId: { $in: followingUsers } })
@@ -24,8 +24,9 @@ async function show(req, res) {
 }
 async function tweet(req, res) {
   console.log("Se ha creado un Tweet");
+  console.log(req.body);
   const newTweet = await Tweet.create({
-    body: req.body.newTweet,
+    body: req.body.body,
     userId: req.auth.id,
   });
   const user = await User.findById(req.auth.id);
@@ -48,13 +49,17 @@ async function like(req, res) {
 
   await tweet.save();
 
-  return res.json({"like":true});
+  return res.json({ like: true });
 }
 
 async function destroy(req, res) {
-  await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.auth.id });
+  console.log("entra");
+  console.log(req.params);
+  console.log(req.auth.id);
+  const tweet = await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.auth.id });
+  console.log(tweet);
 
-  return res.json({"delete":true});
+  return res.json({ delete: true });
 }
 
 module.exports = {
