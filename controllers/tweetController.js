@@ -48,7 +48,9 @@ async function like(req, res) {
 }
 
 async function destroy(req, res) {
-  const tweet = await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.auth.id });
+  const tweet = await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.auth.id }).populate(
+    "userId",
+  );
 
   return res.json({ delete: true });
 }
