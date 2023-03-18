@@ -21,6 +21,14 @@ async function show(req, res) {
   const tweets = await Tweet.find({ userId: req.auth.id });
   return res.json(tweets);
 }
+
+async function showClickedUserTweets(req, res) {
+  const clickedUser = await User.findOne({ username: req.params.username }).populate("tweets");
+  const clickedUserTweets = clickedUser.tweets;
+
+  return res.json(clickedUserTweets);
+}
+
 async function tweet(req, res) {
   const newTweet = await Tweet.create({
     body: req.body.body,
@@ -56,6 +64,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  showClickedUserTweets,
   index,
   show,
   like,

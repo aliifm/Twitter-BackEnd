@@ -40,52 +40,50 @@ async function follow(req, res) {
 }
 
 async function userFollowStatus(req, res) {
-  const loggedUser = await User.findById(req.auth.id).populate("followers");
-  const clickedUser = await User.findById(req.params.id);
+  const loggedUser = await User.findById(req.auth.id).populate("followers").populate("following");
+  const clickedUser = await User.findById(req.params.id).populate("tweets");
 
-  if (!loggedUser.following.includes(clickedUser.id)) {
-    loggedUser.following.push(clickedUser.id);
+  if (!loggedUser.following.some((user) => user.id == clickedUser.id)) {
+    loggedUser.following.push(clickedUser);
   } else {
-    loggedUser.following.pull(clickedUser.id);
+    loggedUser.following.pull(clickedUser);
   }
   const loggedUserFollowers = loggedUser.followers;
+  const loggedUserFollowing = loggedUser.following;
 
   await loggedUser.save();
 
-  res.json({ loggedUser, loggedUserFollowers });
+  res.json({ loggedUser, loggedUserFollowers, loggedUserFollowing, clickedUser });
 }
 
 async function userFollowing(req, res) {
-  //
   const profileUser = await User.findOne({ username: req.params.username });
   const user = await User.findOne({ id: req.params.id }).populate({
     path: "following",
     select: "-password -following -followers",
   });
-  // https://mongoosejs.com/docs/populate.html#query-conditions
 
   const following = user.following;
   return res.json({ following, profileUser });
 }
 
 async function userFollowers(req, res) {
-  const profileUser = await User.findOne({ username: req.params.username })
+  const loggedUser = await User.findOne({ username: req.params.username })
     .populate("followers")
     .populate("following");
   const user = await User.findOne({ id: req.auth.id }).populate("followers").populate("following");
-  // https://mongoosejs.com/docs/populate.html#query-conditions
 
   const userFollowers = user.followers;
   const userFollowing = user.following;
-  const profileFollowers = profileUser.followers;
-  const profileFollowing = profileUser.following;
+  const profileFollowers = loggedUser.followers;
+  const profileFollowing = loggedUser.following;
 
   return res.json({
     userFollowers,
     userFollowing,
     profileFollowers,
     profileFollowing,
-    profileUser,
+    loggedUser,
   });
 }
 
