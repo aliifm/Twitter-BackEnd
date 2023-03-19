@@ -40,7 +40,10 @@ async function follow(req, res) {
 }
 
 async function userFollowStatus(req, res) {
-  const loggedUser = await User.findById(req.auth.id).populate("followers").populate("following");
+  const loggedUser = await User.findById(req.auth.id).populate("followers").populate({
+    path: "following",
+    select: "-password -following -followers",
+  });
   const clickedUser = await User.findById(req.params.id).populate("tweets");
 
   if (!loggedUser.following.some((user) => user.id == clickedUser.id)) {
