@@ -7,6 +7,8 @@ const APP_PORT = process.env.APP_PORT || 8000;
 const app = express();
 
 app.use(cors());
+//Multer necesita una carpeta en el back que guarde el avatar, en este casi es uploads
+app.use("/uploads",express.static('uploads'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

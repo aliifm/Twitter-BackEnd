@@ -15,8 +15,18 @@ async function show(req, res) {
 // RUTA ACTUALIZADA
 // Store a newly created resource in storage.
 async function store(req, res) {
+  //con multer ademas del req.body esta disponible req.file (como en formidable), ahi se guarda el file de la imagen que viene del register
+  const imageURL = "http://localhost:8000/";
   const { firstname, lastname, username, email, password, avatar } = req.body;
-  const user = new User({ firstname, lastname, username, email, password, avatar });
+  const user = new User({
+    firstname,
+    lastname,
+    username,
+    email,
+    password,
+    avatar: imageURL + req.file.path,
+  });
+
   await user.save();
 
   return res.json(user);
@@ -63,7 +73,7 @@ async function userFollowing(req, res) {
   const profileUser = await User.findOne({ username: req.params.username });
   const user = await User.findOne({ id: req.params.id }).populate({
     path: "following",
-    select: "-password -following -followers",
+    select: "-password -followers",
   });
 
   const following = user.following;
