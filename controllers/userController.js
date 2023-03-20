@@ -80,15 +80,17 @@ async function userFollowing(req, res) {
 }
 
 async function userFollowers(req, res) {
-  const loggedUser = await User.findOne({ username: req.params.username })
+  const clickedUser = await User.findOne({ username: req.params.username })
     .populate("followers")
     .populate("following");
-  const user = await User.findOne({ id: req.auth.id }).populate("followers").populate("following");
+  const loggedUser = await User.findOne({ id: req.auth.id })
+    .populate("followers")
+    .populate("following");
 
-  const userFollowers = user.followers;
-  const userFollowing = user.following;
-  const profileFollowers = loggedUser.followers;
-  const profileFollowing = loggedUser.following;
+  const userFollowers = loggedUser.followers;
+  const userFollowing = loggedUser.following;
+  const profileFollowers = clickedUser.followers;
+  const profileFollowing = clickedUser.following;
 
   return res.json({
     userFollowers,

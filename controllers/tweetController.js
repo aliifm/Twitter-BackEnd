@@ -2,13 +2,9 @@ const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 
 async function index(req, res) {
-  // Obtener el usuario logueado
   const currentUser = await User.findById(req.auth.id);
-
-  // Obtener los usuarios que sigue el usuario logueado
   const followingUsers = [req.auth.id, ...currentUser.following];
 
-  // Obtener los tweets de los usuarios que sigue el usuario logueado y ordenarlos por fecha de creación descendente
   const tweets = await Tweet.find({ userId: { $in: followingUsers } })
     .populate("userId")
     .sort({ createdAt: -1 })
