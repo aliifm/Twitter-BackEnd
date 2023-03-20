@@ -17,6 +17,7 @@ async function show(req, res) {
 async function store(req, res) {
   //con multer ademas del req.body esta disponible req.file (como en formidable), ahi se guarda el file de la imagen que viene del register
   const imageURL = "http://localhost:8000/";
+  console.log("req.file:", req.file);
   const { firstname, lastname, username, email, password, avatar } = req.body;
   const user = new User({
     firstname,
@@ -32,8 +33,6 @@ async function store(req, res) {
   return res.json(user);
 }
 
-// ----------------------------------------VER------------------------------
-// VER SI LAS UTILIZARIAMOS
 async function follow(req, res) {
   const profileUser = await User.findById(req.params.id);
   const loggedUser = await User.findById(req.auth.id);
