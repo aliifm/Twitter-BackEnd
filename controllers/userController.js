@@ -1,6 +1,11 @@
 const User = require("../models/User");
 const Tweet = require("../models/Tweet");
 
+async function showAll(req, res) {
+  const user = await User.find().limit(3);
+  return res.json({ user });
+}
+
 // RUTA ACTUALIZADA
 async function show(req, res) {
   const user = await User.findOne({ username: req.params.username })
@@ -102,6 +107,7 @@ async function userFollowers(req, res) {
 }
 
 module.exports = {
+  showAll,
   userFollowStatus,
   show,
   store,

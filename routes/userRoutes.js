@@ -19,6 +19,7 @@ const upload = multer({ storage: storage });
 router.post("/", upload.single("avatar"), userController.store); //
 
 router.use(checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] }));
+router.get("/", userController.showAll);
 router.get("/:username", userController.show); // informacion de usuario por id - tweets/tweet/seguidos/seguidores
 router.post("/:id/follow", userController.follow);
 router.get("/:id/userFollow", userController.userFollowStatus);
