@@ -2,8 +2,25 @@ const User = require("../models/User");
 const Tweet = require("../models/Tweet");
 
 async function showAll(req, res) {
-  const user = await User.find().limit(3);
-  return res.json({ user });
+  const users = await User.find().limit(3);
+
+  const userIds = users.map((user) => user.id); // Map user objects to an array of ids
+  if (userIds.includes(req.auth.id)) {
+    const indexToRemove = users.findIndex((user) => user.id === req.auth.id); // Find index of user to remove
+    users.splice(indexToRemove, 1); // Remove user object at the found index
+  } else if (users.length >= 4) {
+    users.shift(); // Remove the oldest user from the beginning of the array
+  }
+
+  const randomUser = await User.aggregate([{ $sample: { size: 1 } }]);
+  const newUser = randomUser[0];
+  if (newUser && !userIds.includes(newUser.id)) {
+    users.push(newUser); // Add the new user to the end of the array
+  }
+  if (users.length > 3) {
+    users.pop();
+  }
+  return res.json({ users });
 }
 
 // RUTA ACTUALIZADA
