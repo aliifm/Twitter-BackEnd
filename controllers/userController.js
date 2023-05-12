@@ -17,6 +17,7 @@ async function showAll(req, res) {
   if (newUser && !userIds.includes(newUser.id)) {
     users.push(newUser); // Add the new user to the end of the array
   }
+
   if (users.length > 3) {
     users.pop();
   }
